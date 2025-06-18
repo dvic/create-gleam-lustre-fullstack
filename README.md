@@ -6,6 +6,7 @@ A scaffolding tool for creating full-stack Gleam applications with Lustre, featu
 
 - 🚀 Full-stack Gleam/Lustre application setup
 - 🔄 Client-server hydration out of the box
+- ✨ Optimistic UI updates using the `optimist` package
 - 📦 Separate client, server, and shared modules
 - ⚡ Vite for fast client-side development
 - 🧪 Test setup for all modules
@@ -44,6 +45,7 @@ The scaffolded project includes:
   - Hot module replacement
   - TypeScript declarations
   - CSS styling
+  - Optimistic UI updates for better UX
   
 - **Server**: Gleam backend server
   - Static file serving

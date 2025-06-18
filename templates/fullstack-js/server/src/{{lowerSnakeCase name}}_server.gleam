@@ -123,14 +123,29 @@ fn serve_index(
 }
 
 fn handle_save_message(message_file: String, req: Request) -> Response {
+  // Add 1 second delay
+  process.sleep(1000)
+
   use json <- wisp.require_json(req)
 
   case decode.run(json, shared.message_decoder()) {
-    Ok(msg) ->
-      case save_message_to_file(message_file, msg) {
-        Ok(_) -> wisp.ok()
-        Error(_) -> wisp.internal_server_error()
+    Ok(msg) -> {
+      let Message(content) = msg
+      // Return 500 error if message contains "oops"
+      case string.contains(content, "oops") {
+        True -> {
+          wisp.internal_server_error()
+        }
+        False ->
+          case save_message_to_file(message_file, msg) {
+            Ok(_) -> {
+              let body = wisp.Text(string_tree.from_string(msg.content))
+              wisp.set_body(wisp.ok(), body)
+            }
+            Error(_) -> wisp.internal_server_error()
+          }
       }
+    }
     Error(_) -> wisp.bad_request()
   }
 }

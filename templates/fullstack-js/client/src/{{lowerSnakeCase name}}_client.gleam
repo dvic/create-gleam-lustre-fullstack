@@ -8,6 +8,7 @@ import lustre/effect.{type Effect}
 import lustre/element.{type Element}
 import lustre/element/html
 import lustre/event
+import optimist.{type Optimistic}
 import plinth/browser/document
 import plinth/browser/element as plinth_element
 import rsvp
@@ -33,7 +34,7 @@ pub fn main() {
 
 type Model {
   Model(
-    current_message: Message,
+    current_message: Optimistic(Message),
     input_text: String,
     saving: Bool,
     error: Option(String),
@@ -43,7 +44,7 @@ type Model {
 fn init(message: Message) -> #(Model, Effect(Msg)) {
   let model =
     Model(
-      current_message: message,
+      current_message: optimist.from(message),
       input_text: "",
       saving: False,
       error: option.None,
@@ -62,31 +63,48 @@ type Msg {
 
 fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
   case msg {
-    ServerSavedMessage(Ok(_)) -> #(
-      Model(
-        current_message: Message(model.input_text),
-        input_text: "",
-        saving: False,
-        error: option.None,
-      ),
-      effect.none(),
-    )
+    ServerSavedMessage(Ok(response)) -> {
+      #(
+        Model(
+          current_message: optimist.from(Message(response.body)),
+          input_text: "",
+          saving: False,
+          error: option.None,
+        ),
+        effect.none(),
+      )
+    }
 
     ServerSavedMessage(Error(_)) -> #(
       Model(
         ..model,
+        current_message: optimist.revert(model.current_message),
         saving: False,
-        error: option.Some("Failed to save message"),
+        error: option.Some(
+          "Oops! Failed to save message - reverted to previous state",
+        ),
       ),
       effect.none(),
     )
 
     UserTypedMessage(text) -> #(Model(..model, input_text: text), effect.none())
 
-    UserSavedMessage -> #(
-      Model(..model, saving: True),
-      save_message(model.input_text),
-    )
+    UserSavedMessage ->
+      case model.saving || model.input_text == "" {
+        True -> #(model, effect.none())
+        False -> #(
+          Model(
+            current_message: optimist.push(
+              model.current_message,
+              Message(model.input_text),
+            ),
+            input_text: "",
+            saving: True,
+            error: option.None,
+          ),
+          save_message(model.input_text),
+        )
+      }
   }
 }
 
@@ -116,7 +134,7 @@ fn view(model: Model) -> Element(Msg) {
           html.div(
             [attribute.class("p-3 bg-gray-100 rounded border text-gray-800")],
             [
-              html.text(case model.current_message {
+              html.text(case optimist.unwrap(model.current_message) {
                 Message("") -> "No message saved yet."
                 Message(content) -> content
               }),
@@ -124,31 +142,38 @@ fn view(model: Model) -> Element(Msg) {
           ),
         ]),
         // Input form
-        html.div([attribute.class("space-y-4")], [
-          html.input([
-            attribute.class(
-              "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-            ),
-            attribute.placeholder("Enter your message..."),
-            attribute.value(model.input_text),
-            event.on_input(UserTypedMessage),
-          ]),
-          html.button(
-            [
+        html.form(
+          [
+            attribute.class("space-y-4"),
+            event.on_submit(fn(_) { UserSavedMessage }),
+          ],
+          [
+            html.input([
               attribute.class(
-                "w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
+                "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed",
               ),
-              event.on_click(UserSavedMessage),
-              attribute.disabled(model.saving || model.input_text == ""),
-            ],
-            [
-              html.text(case model.saving {
-                True -> "Saving..."
-                False -> "Save Message"
-              }),
-            ],
-          ),
-        ]),
+              attribute.placeholder("Enter your message..."),
+              attribute.value(model.input_text),
+              attribute.disabled(model.saving),
+              event.on_input(UserTypedMessage),
+            ]),
+            html.button(
+              [
+                attribute.class(
+                  "w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
+                ),
+                attribute.type_("submit"),
+                attribute.disabled(model.saving || model.input_text == ""),
+              ],
+              [
+                html.text(case model.saving {
+                  True -> "Saving..."
+                  False -> "Save Message"
+                }),
+              ],
+            ),
+          ],
+        ),
         // Error display
         case model.error {
           option.None -> element.none()
