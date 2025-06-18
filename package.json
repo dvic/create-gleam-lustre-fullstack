@@ -3,7 +3,7 @@
   "bin": {
     "create-gleam-lustre-fullstack": "index.mjs"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold a fullstack Gleam/Lustre app with client-server hydration",
   "repository": {
     "type": "git",
