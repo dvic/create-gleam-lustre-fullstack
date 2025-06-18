@@ -1,0 +1,16 @@
+{
+  "name": "{{lowerSnakeCase name}}_client",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --mode development --minify false",
+    "build": "vite build --mode production"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.10",
+    "tailwindcss": "^4.1.10",
+    "vite": "^6.3.5",
+    "vite-gleam": "^0.4.3",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-static-copy": "^3.0.2"
+  }
+}

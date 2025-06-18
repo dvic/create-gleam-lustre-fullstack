@@ -1,0 +1,27 @@
+{
+  "name": "create-gleam-lustre-fullstack",
+  "bin": {
+    "create-gleam-lustre-fullstack": "index.mjs"
+  },
+  "version": "0.1.0",
+  "description": "scaffold a fullstack gleam/lustre app with client-server hydration",
+  "dependencies": {
+    "kolorist": "^1.8.0",
+    "prompts": "^2.4.2",
+    "simple-scaffold": "^1.0.0"
+  },
+  "type": "module",
+  "files": [
+    "templates",
+    "index.mjs",
+    "scaffold.config.js"
+  ],
+  "author": "dvic",
+  "license": "MIT",
+  "keywords": [
+    "gleam",
+    "lustre",
+    "fullstack",
+    "scaffold"
+  ]
+}
