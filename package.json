@@ -4,7 +4,15 @@
     "create-gleam-lustre-fullstack": "index.mjs"
   },
   "version": "0.1.0",
-  "description": "scaffold a fullstack gleam/lustre app with client-server hydration",
+  "description": "Scaffold a fullstack Gleam/Lustre app with client-server hydration",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dvic/create-gleam-lustre-fullstack.git"
+  },
+  "homepage": "https://github.com/dvic/create-gleam-lustre-fullstack#readme",
+  "bugs": {
+    "url": "https://github.com/dvic/create-gleam-lustre-fullstack/issues"
+  },
   "dependencies": {
     "kolorist": "^1.8.0",
     "prompts": "^2.4.2",
@@ -14,7 +22,9 @@
   "files": [
     "templates",
     "index.mjs",
-    "scaffold.config.js"
+    "scaffold.config.js",
+    "LICENSE",
+    "README.md"
   ],
   "author": "dvic",
   "license": "MIT",
@@ -22,6 +32,16 @@
     "gleam",
     "lustre",
     "fullstack",
-    "scaffold"
-  ]
+    "scaffold",
+    "create",
+    "init",
+    "starter",
+    "boilerplate",
+    "template",
+    "vite",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }

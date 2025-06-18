@@ -1,2 +1,12 @@
-node_modules
+node_modules/
 package-lock.json
+test_output/
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+dist/
+build/
+*.beam
+erl_crash.dump
