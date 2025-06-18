@@ -16,7 +16,7 @@ A scaffolding tool for creating full-stack Gleam applications with Lustre, featu
 ### Using npm create (recommended)
 
 ```bash
-# From npm registry (once published)
+# From npm registry
 npm create gleam-lustre-fullstack@latest
 
 # From GitHub
@@ -26,7 +26,7 @@ npm create github:dvic/create-gleam-lustre-fullstack@latest
 ### Using npx
 
 ```bash
-# From npm registry (once published)
+# From npm registry
 npx create-gleam-lustre-fullstack@latest
 
 # From GitHub
