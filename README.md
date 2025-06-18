@@ -8,7 +8,6 @@ A scaffolding tool for creating full-stack Gleam applications with Lustre, featu
 - 🔄 Client-server hydration out of the box
 - 📦 Separate client, server, and shared modules
 - ⚡ Vite for fast client-side development
-- 🎯 TypeScript support for JavaScript interop
 - 🧪 Test setup for all modules
 
 ## Usage
@@ -16,21 +15,13 @@ A scaffolding tool for creating full-stack Gleam applications with Lustre, featu
 ### Using npm create (recommended)
 
 ```bash
-# From npm registry
 npm create gleam-lustre-fullstack@latest
-
-# From GitHub
-npm create github:dvic/create-gleam-lustre-fullstack@latest
 ```
 
 ### Using npx
 
 ```bash
-# From npm registry
 npx create-gleam-lustre-fullstack@latest
-
-# From GitHub
-npx github:dvic/create-gleam-lustre-fullstack
 ```
 
 ### Using pnpm
@@ -116,7 +107,8 @@ cd server && gleam run
 
 ## Credits
 
-Inspired by [create-gleam](https://github.com/Enderchief/create-gleam) by Enderchief.
+- Inspired by [create-gleam](https://github.com/Enderchief/create-gleam) by Enderchief
+- Based on a simplified version of the [Lustre Full-Stack Applications Guide](https://hexdocs.pm/lustre/guide/06-full-stack-applications.html) example
 
 ## License
 
